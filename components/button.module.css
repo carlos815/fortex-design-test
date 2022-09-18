@@ -1,0 +1,14 @@
+.button {
+    color: red;
+    background-color: var(--main);
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: var(--white);
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.button:hover {
+    background-color: var(--light);
+}
