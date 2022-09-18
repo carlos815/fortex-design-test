@@ -24,7 +24,8 @@ h4 {
 h5 {
     font-size: 16px;
     font-weight: medium;
-    color: var(--light)
+    color: var(--light);
+    margin: 0;
 }
 h6 {
     font-size: 24px;

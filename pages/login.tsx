@@ -1,10 +1,19 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { ChangeEvent, useState } from 'react'
 import Button from '../components/button'
-import styles from '../styles/Home.module.css'
+import Input from '../components/input'
+import styles from '../styles/Login.module.css'
 
 const Home: NextPage = () => {
+
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,45 +22,18 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <Button></Button>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+      <main className={styles.page}>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
+        <div className={styles.login}>
+          <Image src="/logo_original 1.png" width={220} height={72} />
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          <Input title='Email' placeholder='Email' value={username} onChange={(e) => { setUsername(e.target.value) }} />
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          <Input title='Password' placeholder='Password' value={password} onChange={(e) => { setPassword(e.target.value) }} />
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          <Button onClick={() => { console.log("button click") }}>Sign Up</Button>
+        </div>
+        <div className={styles.background}>        <Image src="/background.png" layout="fill" objectFit='cover' />
         </div>
       </main>
 
