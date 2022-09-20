@@ -4,7 +4,7 @@ import EditGroupDialog from '../components/EditGroupDialog'
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { useState } from 'react';
-import { Group } from '../types/types';
+import { Group, Item } from '../types/types';
 import ChipsArray from './ChipsArray';
 import { useData } from '../contexts/dataContext';
 import { deleteGroup, manageGroupMembers, manageGroupRoles, updateGroup } from '../api/fetch';
@@ -12,7 +12,8 @@ import { deleteGroup, manageGroupMembers, manageGroupRoles, updateGroup } from '
 
 export default function TableGroupRow(props: { data: Group }) {
     const data = props.data
-
+    const oldData = JSON.stringify(data)
+    const getOldData = JSON.parse(oldData)
     const [openDialog, setOpenDialog] = useState(false);
     const { fetchGroups } = useData()
 
@@ -39,16 +40,18 @@ export default function TableGroupRow(props: { data: Group }) {
             await updateGroup(data?.id, newData.name, newData.description)
         }
 
-        const peopleChanged = JSON.stringify(newData.people) !== JSON.stringify(data?.people)
+        const peopleChanged = JSON.stringify(newData.people) !== JSON.stringify(getOldData.people)
+
         if (peopleChanged) {
-            const oldPeople = data?.people.filter(item => item.active).map((item) => item.id)
-            const newPeople = newData.people?.filter(item => item.active).map((item) => item.id)
+            const oldPeople = getOldData.people?.filter((item: Item) => item.active).map((item: Item) => item.id)
+            const newPeople = newData.people?.filter((item: Item) => item.active).map((item: Item) => item.id)
             await manageGroupMembers({ groupId: newData.id, oldValues: oldPeople, newValues: newPeople })
         }
-        const rolesChanged = JSON.stringify(newData.roles) !== JSON.stringify(data?.roles)
+        const rolesChanged = JSON.stringify(newData.roles) !== JSON.stringify(getOldData.roles)
         if (rolesChanged) {
-            const oldRoles = data?.roles.filter(item => item.active).map((item) => item.id)
-            const newRoles = newData.roles?.filter(item => item.active).map((item) => item.id)
+            console.log("this ran")
+            const oldRoles = getOldData.roles?.filter((item: Item) => item.active).map((item: Item) => item.id)
+            const newRoles = newData.roles?.filter((item: Item) => item.active).map((item: Item) => item.id)
             await manageGroupRoles({ groupId: newData.id, oldValues: oldRoles, newValues: newRoles })
         }
 
