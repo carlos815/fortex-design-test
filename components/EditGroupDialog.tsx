@@ -3,24 +3,13 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
-import Cookies from 'js-cookie'
 import Typography from '@mui/material/Typography';
-import ListItem from '@mui/material/ListItem';
-
-
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Chip from '@mui/material/Chip';
-import TagFacesIcon from '@mui/icons-material/TagFaces';
 import { Group, Item } from '../types/types';
-import Paper from '@mui/material/Paper';
-import DoneIcon from '@mui/icons-material/Close';
 import ChipsArray from './ChipsArray';
-import { useData } from '../contexts/dataContext';
 
 type EditGroupDialogProps = {
     openDialog: boolean
@@ -28,7 +17,6 @@ type EditGroupDialogProps = {
     data?: Group
     handleSubmitData: Function
 }
-
 
 export default function EditGroupDialog(props: EditGroupDialogProps) {
     const [name, setName] = useState<string | undefined>(props.data?.name)
