@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 // import Button from '../components/button'
 // import Input from '../components/input'
-import { useUser } from '../contexts/dataContext'
+import { useData } from '../contexts/dataContext'
 import styles from '../styles/Login.module.css'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -20,7 +20,7 @@ const Login: NextPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const { logIn }: any = useUser()
+  const { logIn }: any = useData()
 
   const onSubmitForm = useCallback(async (e: FormEvent<HTMLFormElement>) => {
 
@@ -35,7 +35,7 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     if (accessToken()) {
-      // router.replace("/");
+      router.replace("/");
     }
   }, [])
 

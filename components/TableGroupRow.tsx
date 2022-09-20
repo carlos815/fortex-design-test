@@ -19,20 +19,19 @@ import Cookies from 'js-cookie'
 
 
 import { Group, Item } from '../types/types';
-import { deleteGroup, manageGroupMembers, manageGroupRoles, updateGroup } from '../api/user';
+// import { deleteGroup, manageGroupMembers, manageGroupRoles, updateGroup } from '../api/user';
 import ChipsArray from './ChipsArray';
+import { useData } from '../contexts/dataContext';
+import { deleteGroup, manageGroupMembers, manageGroupRoles, updateGroup } from '../api/fetch';
 
 
 export default function TableGroupRow(props: { data: Group }) {
     const data = props.data
 
-    const { row } = props;
-    const [open, setOpen] = useState(false);
-
-    // data.roles = data.roles.filter(role => role.active)
-    // data.people = data.people.filter(people => people.active)
-
     const [openDialog, setOpenDialog] = useState(false);
+
+    const { fetchGroups } = useData()
+
 
     const handleClickOpenDialog = () => {
         setOpenDialog(true);
@@ -42,37 +41,42 @@ export default function TableGroupRow(props: { data: Group }) {
         setOpenDialog(false);
     };
 
-    const handleDeleteGroup = () => {
-        const accessToken = () => Cookies.get('access_token')
-
-        deleteGroup(accessToken(), data.id)
+    const handleDeleteGroup = async () => {
+        try {
+            await deleteGroup(data.id)
+            await fetchGroups()
+        } catch {
+            console.error("error creating group")
+        }
     }
 
 
-    const handleSubmitData = (newData: Group) => {
-        const accessToken = () => Cookies.get('access_token');
-
-        if (newData.name !== props.data.name || newData.description !== props.data.description) {
-            const response = updateGroup(accessToken(), props.data.id, newData.name, newData.description)
+    const handleSubmitData = async (newData: Group) => {
+        const textChanged = (newData.name !== data?.name || newData.description !== data?.description)
+        if (textChanged) {
+            await updateGroup(data?.id, newData.name, newData.description)
         }
 
-        if (JSON.stringify(newData.people) !== JSON.stringify(props.data.people)) {
-
-            const oldValues = props.data.people.filter(item => item.active).map((item) => item.id)
-            const newValues = newData.people.filter(item => item.active).map((item) => item.id)
-
-            manageGroupMembers(accessToken(), { groupId: newData.id, oldValues, newValues })
+        const peopleChanged = JSON.stringify(newData.people) !== JSON.stringify(data?.people)
+        if (peopleChanged) {
+            const oldPeople = data?.people.filter(item => item.active).map((item) => item.id)
+            const newPeople = newData.people?.filter(item => item.active).map((item) => item.id)
+            await manageGroupMembers({ groupId: newData.id, oldValues: oldPeople, newValues: newPeople })
+        }
+        const rolesChanged = JSON.stringify(newData.roles) !== JSON.stringify(data?.roles)
+        console.log(newData.roles[1])
+        console.log(data?.roles[1])
+        if (!rolesChanged) {
+            const oldRoles = data?.roles.filter(item => item.active).map((item) => item.id)
+            const newRoles = newData.roles?.filter(item => item.active).map((item) => item.id)
+            const result = await manageGroupRoles({ groupId: newData.id, oldValues: oldRoles, newValues: newRoles })
+            console.log(result)
         }
 
-        if (JSON.stringify(newData.roles) !== JSON.stringify(props.data.roles)) {
-
-            const oldValues = props.data.roles.filter(item => item.active).map((item) => item.id)
-            const newValues = newData.roles.filter(item => item.active).map((item) => item.id)
-
-            manageGroupRoles(accessToken(), { groupId: newData.id, oldValues, newValues })
+        const somethingChanged = textChanged || peopleChanged || rolesChanged
+        if (somethingChanged) {
+            fetchGroups()
         }
-
-
     }
 
     return (<TableRow>
@@ -93,9 +97,9 @@ export default function TableGroupRow(props: { data: Group }) {
         <TableCell>
             {data.name}</TableCell>
         <TableCell>{data.description}</TableCell>
-        <TableCell>            <ChipsArray items={props.data.roles.filter(item => item.active)} simple />
+        <TableCell>            <ChipsArray items={data.roles.filter(item => item.active)} simple />
         </TableCell>
-        <TableCell>            <ChipsArray items={props.data.people.filter(item => item.active)} simple />
+        <TableCell>            <ChipsArray items={data.people.filter(item => item.active)} simple />
         </TableCell>
 
 

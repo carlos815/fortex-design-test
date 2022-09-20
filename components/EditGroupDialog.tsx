@@ -17,10 +17,10 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import { Group, Item } from '../types/types';
-import { deleteGroup, updateGroup } from '../api/user';
 import Paper from '@mui/material/Paper';
 import DoneIcon from '@mui/icons-material/Close';
 import ChipsArray from './ChipsArray';
+import { useData } from '../contexts/dataContext';
 
 type EditGroupDialogProps = {
     openDialog: boolean
@@ -31,15 +31,16 @@ type EditGroupDialogProps = {
 
 
 export default function EditGroupDialog(props: EditGroupDialogProps) {
-
     const [name, setName] = useState<string | undefined>(props.data?.name)
     const [description, setDescription] = useState<string | undefined>(props.data?.description)
     const [people, setPeople] = useState<Item[] | undefined>(props.data?.people)
     const [roles, setRoles] = useState<Item[] | undefined>(props.data?.roles)
 
     useEffect(() => {
-        initializeValues()
-    }, [])
+        if (props.openDialog) {
+            initializeValues()
+        }
+    }, [props.openDialog])
 
     const initializeValues = () => {
         setName(props.data?.name)
@@ -48,8 +49,7 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
         setRoles(props.data?.roles)
     }
 
-    const submitData = async () => {
-        props.onClose();
+    const handleSubmitData = async () => {
         const newData = {
             id: props.data?.id,
             name,
@@ -57,7 +57,8 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
             people,
             roles
         }
-        props.handleSubmitData(newData);
+        props.handleSubmitData(newData)
+        props.onClose();
     }
 
     const handleRolesToggle = (data: Item) => {
@@ -79,6 +80,7 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
             return item
         }))
     }
+
     return <Dialog open={props.openDialog} onClose={() => props.onClose()}>
         <DialogTitle>Edit {props.data?.name}</DialogTitle>
         <DialogContent>
@@ -101,21 +103,18 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
             {props.data?.people !== undefined && <> <Typography>
                 People
             </Typography>
-
                 <ChipsArray items={people} handleToggle={(data: Item) => { handlePeopleToggle(data) }} /></>
             }
             {props.data?.roles !== undefined && <>  <Typography>
                 Roles
             </Typography>
-
                 <ChipsArray items={roles} handleToggle={(data: Item) => { handleRolesToggle(data) }} /></>
             }
-
         </DialogContent>
         <DialogActions>
             <Button onClick={() => props.onClose()}>Cancel</Button>
             <Button onClick={() => {
-                submitData()
+                handleSubmitData()
             }}>Submit</Button>
         </DialogActions>
     </Dialog>

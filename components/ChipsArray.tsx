@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
 import { Group, Item } from '../types/types';
-import { deleteGroup, updateGroup } from '../api/user';
+import { deleteGroup, updateGroup } from '../api/fetch';
 import Paper from '@mui/material/Paper';
 import DoneIcon from '@mui/icons-material/Close';
 

@@ -3,8 +3,8 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { createGroup, fetchGroup, manageGroupMembers, updateGroup } from '../api/user'
-import { useUser } from '../contexts/dataContext'
+import { createGroup } from '../api/fetch'
+import { useData } from '../contexts/dataContext'
 import styles from '../styles/Home.module.css'
 import Cookies from 'js-cookie'
 import Table from '@mui/material/Table';
@@ -26,50 +26,27 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import EditGroupDialog from '../components/EditGroupDialog'
 import { group } from 'console'
-export interface Groups {
-  groups: Group[];
-}
-
-export interface Group {
-  id: string;
-  name: string;
-  description: string;
-  type: boolean;
-  roles: Item[];
-  people: Item[];
-  members: number;
-}
-
-export interface Item {
-  id: string;
-  name: string;
-  active: boolean;
-}
+import { Group } from '../types/types'
+import { getAccessToken } from "../api/fetch";
 
 
 
 const Home: NextPage = () => {
-  const accessToken = () => Cookies.get('access_token')
-  const [groups, setGroups] = useState<Group[]>()
-
+  const { fetchGroups, data } = useData()
 
   const router = useRouter()
-  const fetchGroups = async () => {
-    try {
-      const response = await fetchGroup(accessToken())
-      const result: Groups = await response.json()
-      if (response.status > 200) throw Error("response")
-      setGroups(result.groups)
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   useEffect(() => {
-    if (!accessToken()) {
+    if (!getAccessToken()) {
       router.replace("/login");
     } else {
-      fetchGroups()
+      (async () => {
+        try {
+          fetchGroups()
+        } catch {
+          //TODO: Show something in the interface
+        }
+      })()
     }
   }, [])
 
@@ -83,10 +60,19 @@ const Home: NextPage = () => {
     setOpenDialog(false);
   };
 
-  const handleSubmitData = async (newData: Group) => {
-    const accessToken = () => Cookies.get('access_token');
-    const response = await createGroup(accessToken(), { name: newData.name, description: newData.description })
+  const handleCreateGroup = async (newData: Group) => {
+    try {
+      await createGroup(newData)
+      await fetchGroups()
+    } catch {
+      console.error("error creating group")
+    }
   }
+
+  // const handleSubmitData = async (newData: Group) => {
+  //   const accessToken = () => Cookies.get('access_token');
+  //   const response = await createGroup(accessToken(), { name: newData.name, description: newData.description })
+  // }
 
   return (
     <div className={styles.container}>
@@ -122,7 +108,7 @@ const Home: NextPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {groups?.map(group => {
+              {data?.map((group: Group) => {
                 return (
                   <TableGroupRow key={group.id} data={group} />)
               }
@@ -140,7 +126,7 @@ const Home: NextPage = () => {
         </Fab>
         <EditGroupDialog data={{}} onClose={handleCloseDialog} openDialog={openDialog}
 
-          handleSubmitData={(newData: Group) => handleSubmitData(newData)}
+          handleSubmitData={(newData: Group) => handleCreateGroup(newData)}
         />
       </main>
 
