@@ -89,11 +89,11 @@ const Home: NextPage = () => {
                 <TableCell>
                   Description
                 </TableCell>
-                <TableCell>
-                  People
-                </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   Roles
+                </TableCell>
+                <TableCell align="center">
+                  People
                 </TableCell>
                 <TableCell>
                 </TableCell>
