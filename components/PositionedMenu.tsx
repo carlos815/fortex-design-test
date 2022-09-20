@@ -3,10 +3,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteGroupDialog from './deleteGroupDialog';
+import { Group } from '../types/types';
 
 type PositionedMenuProps = {
     handleEdit: Function
     handleDelete: Function
+    data: Group
 }
 
 export default function PositionedMenu(props: PositionedMenuProps) {
@@ -18,6 +21,8 @@ export default function PositionedMenu(props: PositionedMenuProps) {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
 
     return (
         <div >
@@ -48,10 +53,13 @@ export default function PositionedMenu(props: PositionedMenuProps) {
                     handleClose()
                 }}>Edit</MenuItem>
                 <MenuItem onClick={() => {
-                    props.handleDelete()
+                    setOpenDeleteDialog(true)
                     handleClose()
                 }} >Delete</MenuItem>
             </Menu>
+            <DeleteGroupDialog openDialog={openDeleteDialog} onClose={() => { setOpenDeleteDialog(false) }} handleSubmitData={() => {
+                props.handleDelete()
+            }} data={props.data} />
         </div>
     );
 }

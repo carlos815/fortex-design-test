@@ -30,7 +30,7 @@ export default function TableGroupRow(props: { data: Group }) {
             await deleteGroup(data.id)
             await fetchGroups()
         } catch {
-            console.error("error creating group")
+            console.error("error deleting group")
         }
     }
 
@@ -76,9 +76,10 @@ export default function TableGroupRow(props: { data: Group }) {
                 <ChipsArray items={data.people.filter(item => item.active)} simple />
             </TableCell>
             <TableCell>
-                <PositionedMenu handleDelete={() => { handleDeleteGroup() }} handleEdit={() => { handleClickOpenDialog() }} />
+                <PositionedMenu handleDelete={() => { handleDeleteGroup() }} handleEdit={() => { handleClickOpenDialog() }} data={data} />
             </TableCell>
             <EditGroupDialog data={data} onClose={handleCloseDialog} openDialog={openDialog} handleSubmitData={(newData: Group) => handleSubmitData(newData)} />
+
         </TableRow>);
 
 }
