@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 const base_url = "https://demo-api-work-test.herokuapp.com/"
 
 export const getAccessToken = () => Cookies.get('access_token')
+export const deleteAccessToken = () => Cookies.remove('access_token')
 
 export const logIn = async (user: string, password: string) => {
 
