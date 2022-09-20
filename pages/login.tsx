@@ -5,14 +5,14 @@ import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
 // import Button from '../components/button'
 // import Input from '../components/input'
-import { useData } from '../contexts/dataContext'
 import styles from '../styles/Login.module.css'
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Cookies from 'js-cookie'
 import { logIn } from '../api/fetch'
-
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -20,6 +20,7 @@ const Login: NextPage = () => {
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState(false)
 
 
   const onSubmitForm = useCallback(async (e: FormEvent<HTMLFormElement>) => {
@@ -29,7 +30,7 @@ const Login: NextPage = () => {
       await logIn(username, password)
       router.replace("/");
     } catch (error) {
-      console.log(error)
+      setError(true)
     }
   }, [username, password])
 
@@ -66,9 +67,14 @@ const Login: NextPage = () => {
             <TextField label='Email' placeholder='Email' value={username} onChange={(e) => { setUsername(e.target.value) }} />
 
             <TextField label='Password' value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" />
+            {error && <Stack sx={{ width: '100%' }} spacing={2}>
+              <Alert severity="error">One or more details is incorrect</Alert>
 
-            <Button variant="contained" type="submit" color="primary">Sign Up</Button>
-
+            </Stack>}
+            <Button variant="contained" type="submit" color="primary" sx={{
+              m: 2,
+            }}
+            >Sign Up</Button>
           </Box>
 
         </div>
@@ -76,18 +82,6 @@ const Login: NextPage = () => {
         </div>
       </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }

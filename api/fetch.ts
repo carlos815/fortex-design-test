@@ -20,8 +20,9 @@ export const logIn = async (user: string, password: string) => {
     };
 
     const response = await fetch(base_url + "login", requestOptions)
+    if (response.status > 200) throw Error(await response.text())
+
     const result = await response.json()
-    if (response.status > 200) throw Error(result)
     Cookies.set("access_token", result.token)
 }
 
