@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Cookies from 'js-cookie'
+import { logIn } from '../api/fetch'
 
 
 const Login: NextPage = () => {
@@ -20,7 +21,6 @@ const Login: NextPage = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const { logIn }: any = useData()
 
   const onSubmitForm = useCallback(async (e: FormEvent<HTMLFormElement>) => {
 
