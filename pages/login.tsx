@@ -1,17 +1,43 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { ChangeEvent, useState } from 'react'
-import Button from '../components/button'
-import Input from '../components/input'
+import { useRouter } from 'next/router'
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from 'react'
+// import Button from '../components/button'
+// import Input from '../components/input'
+import { useUser } from '../contexts/userContext'
 import styles from '../styles/Login.module.css'
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Cookies from 'js-cookie'
 
-const Home: NextPage = () => {
+
+const Login: NextPage = () => {
+  const router = useRouter();
+  const accessToken = () => Cookies.get('access_token')
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const { logIn }: any = useUser()
 
+  const onSubmitForm = useCallback(async (e: FormEvent<HTMLFormElement>) => {
+
+    e.preventDefault()
+    try {
+      await logIn(username, password)
+      router.replace("/");
+    } catch (error) {
+      console.log(error)
+    }
+  }, [username, password])
+
+  useEffect(() => {
+    if (accessToken()) {
+      router.replace("/");
+    }
+  }, [])
 
 
   return (
@@ -24,14 +50,27 @@ const Home: NextPage = () => {
 
       <main className={styles.page}>
 
-        <div className={styles.login}>
+        <div className={styles.main}>
           <Image src="/logo_original 1.png" width={220} height={72} />
 
-          <Input title='Email' placeholder='Email' value={username} onChange={(e) => { setUsername(e.target.value) }} />
 
-          <Input title='Password' placeholder='Password' value={password} onChange={(e) => { setPassword(e.target.value) }} />
+          <Box
+            component="form"
+            sx={{
+              '& .MuiTextField-root': { m: 2, width: '100%' },
+            }}
 
-          <Button onClick={() => { console.log("button click") }}>Sign Up</Button>
+            autoComplete="off"
+
+            className={styles.form} onSubmit={(e) => { onSubmitForm(e) }}>
+            <TextField label='Email' placeholder='Email' value={username} onChange={(e) => { setUsername(e.target.value) }} />
+
+            <TextField label='Password' value={password} onChange={(e) => { setPassword(e.target.value) }} type="password" />
+
+            <Button variant="contained" type="submit" color="primary">Sign Up</Button>
+
+          </Box>
+
         </div>
         <div className={styles.background}>        <Image src="/background.png" layout="fill" objectFit='cover' />
         </div>
@@ -53,4 +92,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Login
