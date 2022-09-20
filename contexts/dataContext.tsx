@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext, useContext, ReactComponentEl
 import { fetchGroup, loginUser } from "../api/user";
 import Cookies from 'js-cookie'
 
-export const UserContext = createContext<any>(null);
+export const DataContext = createContext<any>(null);
 
 
 export const getAccessToken = () => Cookies.get('access_token')
@@ -23,12 +23,12 @@ export default function UserContextComp({ children }) {
 
 
   return (
-    <UserContext.Provider value={{ logIn }
+    <DataContext.Provider value={{ logIn }
     }>
       {children}
-    </UserContext.Provider>
+    </DataContext.Provider>
   );
 }
 
 // Custom hook that shorthands the context!
-export const useUser = () => useContext(UserContext);
+export const useUser = () => useContext(DataContext);

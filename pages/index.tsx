@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { createGroup, fetchGroup, manageGroupMembers, updateGroup } from '../api/user'
-import { useUser } from '../contexts/userContext'
+import { useUser } from '../contexts/dataContext'
 import styles from '../styles/Home.module.css'
 import Cookies from 'js-cookie'
 import Table from '@mui/material/Table';

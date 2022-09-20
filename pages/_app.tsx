@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import UserProvider from "../contexts/userContext";
+import UserProvider from "../contexts/dataContext";
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 
