@@ -35,7 +35,7 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     if (accessToken()) {
-      router.replace("/");
+      // router.replace("/");
     }
   }, [])
 

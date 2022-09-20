@@ -36,6 +36,7 @@ export default function ChipsArray(props: { items: Item[] | undefined, handleTog
                             label={data.name}
                             // color={data.active ? "primary" : "default"}
                             variant={data.active ? "filled" : "outlined"}
+                            size="small"
                         />
 
 

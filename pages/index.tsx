@@ -99,19 +99,26 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <h1>Group Table React Demo</h1>
         <TableContainer component={Paper} >
-          <Table>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>
-                </TableCell>
                 <TableCell>
                   Name
                 </TableCell>
                 <TableCell>
                   Description
                 </TableCell>
+
                 <TableCell>
+                  People
                 </TableCell>
+                <TableCell>
+                  Roles
+                </TableCell>
+                <TableCell>
+
+                </TableCell>
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -143,3 +150,4 @@ const Home: NextPage = () => {
 }
 
 export default Home
+

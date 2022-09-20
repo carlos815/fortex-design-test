@@ -75,13 +75,11 @@ export default function TableGroupRow(props: { data: Group }) {
 
     }
 
-    return (<>
-        <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-            <TableCell>
+    return (<TableRow>
+
+        {/* <TableCell>
                 {(data.roles.filter(item => item.active).length !== 0 ||
                     data.people.filter(item => item.active).length !== 0) &&
-
-
                     <IconButton
                         aria-label="expand row"
                         size="small"
@@ -91,14 +89,23 @@ export default function TableGroupRow(props: { data: Group }) {
                     </IconButton>
                 }
 
-            </TableCell>
-            <TableCell>{data.name}</TableCell>
-            <TableCell>{data.description}</TableCell>
-            <TableCell>
-                <PositionedMenu handleDelete={() => { handleDeleteGroup() }} handleEdit={() => { handleClickOpenDialog() }} />
-            </TableCell>
-        </TableRow>
-        {data.people.filter(item => item.active).length != 0 &&
+            </TableCell> */}
+        <TableCell>
+            {data.name}</TableCell>
+        <TableCell>{data.description}</TableCell>
+        <TableCell>            <ChipsArray items={props.data.roles.filter(item => item.active)} simple />
+        </TableCell>
+        <TableCell>            <ChipsArray items={props.data.people.filter(item => item.active)} simple />
+        </TableCell>
+
+
+        <TableCell>
+            <PositionedMenu handleDelete={() => { handleDeleteGroup() }} handleEdit={() => { handleClickOpenDialog() }} />
+        </TableCell>
+
+        <EditGroupDialog data={data} onClose={handleCloseDialog} openDialog={openDialog} handleSubmitData={(newData) => handleSubmitData(newData)} />
+
+        {/* {data.people.filter(item => item.active).length != 0 &&
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
@@ -128,13 +135,12 @@ export default function TableGroupRow(props: { data: Group }) {
                     </Box>
                 </Collapse>
             </TableCell>
-        </TableRow>}
-
-        <EditGroupDialog data={data} onClose={handleCloseDialog} openDialog={openDialog} handleSubmitData={(newData) => handleSubmitData(newData)} />
+        </TableRow>} */}
 
 
 
-    </>);
+
+    </TableRow>);
 
 }
 
