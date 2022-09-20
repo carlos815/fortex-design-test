@@ -39,10 +39,8 @@ export default function ChipsArray(props: { items: Item[] | undefined, handleTog
                             deleteIcon={data.active ? <DoneIcon /> : <DoneIcon style={{ display: "none" }} />}
                             onClick={() => { props.handleToggle && props.handleToggle(data) }} />}
                     </div>
-
                 );
             })}
-
         </Paper>
     );
 }
