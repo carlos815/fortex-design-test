@@ -115,7 +115,7 @@ const Home: NextPage = () => {
         }} onClick={() => { setOpenDialog(true) }}>
           <AddIcon />
         </Fab>
-        <EditGroupDialog data={{}} onClose={handleCloseDialog} openDialog={openDialog}
+        <EditGroupDialog data={{ name: "", description: "" }} onClose={handleCloseDialog} openDialog={openDialog}
 
           handleSubmitData={(newData: Group) => handleCreateGroup(newData)}
         />

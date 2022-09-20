@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { Group, Item } from '../types/types';
 import ChipsArray from './ChipsArray';
+import { useData } from '../contexts/dataContext';
 
 type EditGroupDialogProps = {
     openDialog: boolean
@@ -20,9 +21,13 @@ type EditGroupDialogProps = {
 
 export default function EditGroupDialog(props: EditGroupDialogProps) {
     const [name, setName] = useState<string | undefined>(props.data?.name)
+    const [nameError, setNameError] = useState(false)
+    const [nameErrorMessage, setNameErrorMessage] = useState<string | null>()
     const [description, setDescription] = useState<string | undefined>(props.data?.description)
     const [people, setPeople] = useState<Item[] | undefined>(props.data?.people)
     const [roles, setRoles] = useState<Item[] | undefined>(props.data?.roles)
+
+    const { data } = useData()
 
     useEffect(() => {
         if (props.openDialog) {
@@ -35,9 +40,35 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
         setDescription(props.data?.description)
         setPeople(props.data?.people)
         setRoles(props.data?.roles)
+        setNameError(false)
+        setNameErrorMessage(null)
     }
 
     const handleSubmitData = async () => {
+
+        const nameChanged = props.data?.name != name
+
+        if (nameChanged) {
+            const duplicatedName = data.findIndex((group: Group) => {
+                return group.name == name
+            }) != -1
+
+            if (duplicatedName) {
+                setNameError(true)
+                setNameErrorMessage("This name is already in use")
+                return
+            } else {
+                setNameError(false)
+            }
+        }
+
+        if (name == "") {
+            console.log("the name is empty")
+            setNameError(true)
+            setNameErrorMessage("The name field can't be empty")
+            return
+        }
+
         const newData = {
             id: props.data?.id,
             name,
@@ -45,6 +76,7 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
             people,
             roles
         }
+
         props.handleSubmitData(newData)
         props.onClose();
     }
@@ -69,10 +101,14 @@ export default function EditGroupDialog(props: EditGroupDialogProps) {
         }))
     }
 
+
+
     return <Dialog open={props.openDialog} onClose={() => props.onClose()}>
         <DialogTitle>Edit {props.data?.name}</DialogTitle>
         <DialogContent>
             <TextField
+                error={nameError}
+                helperText={nameErrorMessage}
                 autoFocus
                 margin="dense"
                 id="name"
