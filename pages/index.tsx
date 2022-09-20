@@ -52,10 +52,6 @@ const Home: NextPage = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleClickOpenDialog = () => {
-    setOpenDialog(true);
-  };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -68,11 +64,6 @@ const Home: NextPage = () => {
       console.error("error creating group")
     }
   }
-
-  // const handleSubmitData = async (newData: Group) => {
-  //   const accessToken = () => Cookies.get('access_token');
-  //   const response = await createGroup(accessToken(), { name: newData.name, description: newData.description })
-  // }
 
   return (
     <div className={styles.container}>
@@ -94,7 +85,6 @@ const Home: NextPage = () => {
                 <TableCell>
                   Description
                 </TableCell>
-
                 <TableCell>
                   People
                 </TableCell>
@@ -102,9 +92,7 @@ const Home: NextPage = () => {
                   Roles
                 </TableCell>
                 <TableCell>
-
                 </TableCell>
-
               </TableRow>
             </TableHead>
             <TableBody>
@@ -116,7 +104,6 @@ const Home: NextPage = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
         <Fab color="primary" aria-label="add" sx={{
           position: 'fixed',
           bottom: 16,
